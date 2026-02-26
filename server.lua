@@ -16,7 +16,7 @@ end
 function Server:getOrCreateRoom(RoomSystem, Global)
 	for _, room in pairs(self.rooms) do
 		if room.state == "waiting" and not room:isFull() then
-			self.logger.print("Assigning player to existing room:", room.id)
+			self.logger:print("Assigning player to existing room:", room.id)
 			return room
 		end
 	end
@@ -24,7 +24,7 @@ function Server:getOrCreateRoom(RoomSystem, Global)
 	local id = #self.rooms + 1
 	local room = RoomSystem:new(id, Global)
 	self.rooms[id] = room
-	self.logger.print("Created new room:", id)
+	self.logger:print("Created new room:", id)
 	return room
 end
 
@@ -42,7 +42,7 @@ function Server:checkRoomStart(room)
 		room.state = "playing"
 		room.global:resetBall(1)
 		self:broadcastRoom(room, "start")
-		self.logger.print("Room", room.id, "started match. Both players ready.")
+		self.logger:print("Room", room.id, "started match. Both players ready.")
 	end
 end
 
@@ -66,10 +66,10 @@ function Server:handleNetwork(RoomSystem, Global)
 				room.players[slot].peer = event.peer
 				self.peerRoom[event.peer] = room
 				event.peer:send("id|" .. slot)
-				self.logger.print("Player connected:", "Room", room.id, "Slot", slot)
+				self.logger:print("Player connected:", "Room", room.id, "Slot", slot)
 			else
 				event.peer:disconnect()
-				self.logger.print("Player connection rejected: all slots full in Room", room.id)
+				self.logger:print("Player connection rejected: all slots full in Room", room.id)
 			end
 		end
 
@@ -81,12 +81,12 @@ function Server:handleNetwork(RoomSystem, Global)
 					if room.players[i].peer == event.peer then
 						room.players[i].peer = nil
 						room.players[i].ready = false
-						self.logger.print("Player disconnected from Room", room.id, "Slot", i)
+						self.logger:print("Player disconnected from Room", room.id, "Slot", i)
 					end
 				end
 				room.state = "waiting"
 				room:resetReady()
-				self.logger.print("Room", room.id, "reset to waiting state due to disconnect")
+				self.logger:print("Room", room.id, "reset to waiting state due to disconnect")
 			end
 			self.peerRoom[event.peer] = nil
 		end
@@ -104,7 +104,7 @@ function Server:handleNetwork(RoomSystem, Global)
 				local id = tonumber(event.data:sub(7))
 				if id and room.players[id] then
 					room.players[id].ready = true
-					self.logger.print("Player", id, "ready in Room", room.id)
+					self.logger:print("Player", id, "ready in Room", room.id)
 					self:checkRoomStart(room)
 				end
 			else
