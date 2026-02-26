@@ -11,6 +11,7 @@ function Client:new(global, address)
 
     c.id = nil
     c.ready = false
+    c.playing = false
     c.connectionTime = love.timer.getTime()
     c.sampleRate = 44100
     c.bufferSize = 1024
@@ -140,6 +141,7 @@ function Client:handleNetwork()
                 self.id = tonumber(event.data:sub(4))
             elseif event.data == "start" then
                 self.ready = false
+                self.playing = true
             else
                 self.global:deserialize(event.data)
             end
@@ -224,7 +226,7 @@ function Client:draw()
 
     local infoY = 30
 
-    if (not self.ready) or g.gameState ~= "playing" then
+    if (not self.ready) and not self.playing then
         local txt = "Press SPACE to Ready Up"
         local w2 = love.graphics.getFont():getWidth(txt)
         love.graphics.print(txt, (virtualW - w2)/2, infoY)
