@@ -7,7 +7,7 @@ function Client:new(global, address)
 
     c.global = global
     c.host = enet.host_create()
-    c.server = c.host:connect(address or "localhost:1990")
+    c.server = c.host:connect(address or "149.5.246.203:1990")
 
     c.id = nil
     c.ready = false

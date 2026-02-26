@@ -21,6 +21,7 @@ function LOGGING:print(...)
         table.insert(parts, tostring(v))
     end
     local line = table.concat(parts, "\t")
+    if not self.queue then self.queue = {} end
     table.insert(self.queue, line)
 end
 
@@ -53,7 +54,7 @@ function LOGGING:flush()
     local f, err = io.open(self.filename, "a")
     if f then
         for _, line in ipairs(self.queue) do
-            f:write(os.date("[%Y-%m-%d %H:%M:%S] ") .. line .. "\n")
+            f:write(os.date("[%Y-%m-%d %H:%M:%S] ") .. table.remove(self.queue, _) .. "\n")
         end
         f:close()
         self.queue = {}

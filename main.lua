@@ -24,7 +24,7 @@ function love.load()
 		app = Server:new(enet, logger)
 	else
 		love.graphics.setDefaultFilter("nearest", "nearest")
-		app = Client:new(global)
+		app = Client:new(global, "149.5.246.203:1990")
 	end
 end
 
