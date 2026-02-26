@@ -24,6 +24,8 @@ function love.load()
 		app = Server:new(enet, logger)
 	else
 		love.graphics.setDefaultFilter("nearest", "nearest")
+		love.window.setTitle("Online Pong")
+		love.window.setMode(800, 500, {vsync = false})
 		app = Client:new(global, "love.donreagan.ca:1990")
 	end
 end

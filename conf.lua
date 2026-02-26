@@ -4,5 +4,7 @@ function love.conf(t)
         t.modules.audio = false
         t.modules.window = false
         t.modules.graphics = false
+    else
+        t.window.icon = "logo.png"
     end
 end
